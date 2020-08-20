@@ -26,32 +26,50 @@ namespace PlumsailTest_API.Controllers
             _logger = logger;
             _context = context;
         }
-
+        /// <summary>
+        /// add object to DB
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> AddObject(object obj)
         {
-            var t = obj.ToBsonDocument();
-            var str = JsonSerializer.Serialize(obj);
+            try
+            {
+                BsonDocument doc = BsonDocument.Parse(obj.ToString());
+                await _context.Create(doc);
+                _logger.LogInformation("Object added into DB");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
 
-            BsonDocument doc = BsonDocument.Parse(str);
-            await _context.Create(doc);
-            _logger.LogInformation("Object added into DB");
-            return Ok();
         }
 
         /// <summary>
-        /// поиск объектов по строке
+        /// search objects by string
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<List<object>> SearchObjects(string str)
+        public async Task<ActionResult<List<object>>> SearchObjects(string str)
         {
-            List<BsonDocument> docs = (await _context.GetItems(str)).ToList();
-            _logger.LogInformation("Found {} objects", docs.Count);
-            List<object> result = docs.ConvertAll(BsonTypeMapper.MapToDotNetValue);
+            try
+            {
+                List<BsonDocument> docs = (await _context.GetItems(str)).ToList();
+                List<object> result = docs.ConvertAll(BsonTypeMapper.MapToDotNetValue);
+                _logger.LogInformation("Found {} objects", docs.Count);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
 
-            return result;
         }
     }
 }

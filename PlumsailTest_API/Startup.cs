@@ -39,7 +39,7 @@ namespace PlumsailTest_API
             }
             app.UseCors("myPolicy");
 
-            app.UseHttpsRedirection();           
+            app.UseHttpsRedirection();     
 
             app.UseRouting();
 

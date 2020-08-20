@@ -4,10 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Reflection;
-using MongoDB.Bson.IO;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 
 namespace PlumsailTest_API
@@ -47,9 +43,7 @@ namespace PlumsailTest_API
         /// <returns></returns>
         public async Task Create(BsonDocument doc)
         {
-            //BsonDocument data = MongoDB.Bson.Serialization.BsonSerializer.Deserialize<BsonDocument>(str);
             //convert fields of object to list of props for better indexing in db
-
             BsonArray arr = new BsonArray();
             foreach (var d in doc)
             {
