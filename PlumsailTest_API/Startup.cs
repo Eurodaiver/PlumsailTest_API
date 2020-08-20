@@ -39,6 +39,8 @@ namespace PlumsailTest_API
             }
             app.UseCors("myPolicy");
 
+            app.UseStaticFiles();
+
             app.UseHttpsRedirection();     
 
             app.UseRouting();
