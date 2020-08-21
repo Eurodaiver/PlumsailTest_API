@@ -28,7 +28,7 @@ namespace PlumsailTest_API
         /// <returns></returns>
         public async Task<IEnumerable<BsonDocument>> GetItems(string str)
         {
-            var filter = Builders<BsonDocument>.Filter.Regex("props.v", new BsonRegularExpression(str));
+            var filter = Builders<BsonDocument>.Filter.Regex("props.v", new BsonRegularExpression(str, "i"));
 
             List<BsonDocument> found = ObjectItems.Find(filter).Project(new BsonDocument { { "props", 1 }, { "_id", 0 } }).ToList();
      
